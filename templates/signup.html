@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>SignUp Page</title>
+</head>
+<body>
+	<br>
+	<form name="signup_form">
+		<table align="center">
+			<tr>
+				<td align="center"><h3>Enter your details</h3></td>
+			</tr>
+		</table>
+		<table align="center">
+			<tr>
+				<td> UserName:</td>
+				<td> <input type="text" name="username" required> </td>
+            </tr>
+            <tr>
+				<td> Email:</td>
+				<td> <input type="text" name="email" required> </td>
+            </tr>
+            <tr>
+				<td> Mobile number:</td>
+				<td> <input type="text" name="phno" required> </td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" name="password" required></td>
+            </tr>
+            <tr>
+				<td> Confirm Password:</td>
+				<td> <input type="password" name="password2" required> </td>
+			</tr>		
+			<tr>
+                <td><a href="/">Login</a></td>
+				<td align="center"><input type="button" value="SignUp" onclick = signup()></td>
+			</tr>
+		</table>
+		<table align="center">
+			<tr align="center">
+				<td align="center"><p id="error"></p></td>
+			</tr>
+		</table>
+	</form><br>
+
+<script>
+function signup(){
+	var xhttp = new XMLHttpRequest();
+	uname = document.forms["signup_form"]["username"].value.trim();
+	upass = document.forms["signup_form"]["password"].value.trim();
+    upass2 = document.forms["signup_form"]["password2"].value.trim();
+    uphno = document.forms["signup_form"]["phno"].value.trim();
+    uemail = document.forms["signup_form"]["email"].value.trim();
+	var credentials={
+		"username":uname,
+		"password":upass,
+        "email":uemail,
+        "phno":uphno
+	};
+	credential=JSON.stringify(credentials);
+    if(uname.trim() == "") {
+		alert("Username cannot be empty!");
+		return false;
+	}
+    if( !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(uemail)) ) {
+        document.getElementById("error").innerHTML="Enter a valid Email address!";
+        return false;
+	}
+    if(upass.length < 8 || upass.length > 16) {
+        document.getElementById("error").innerHTML="Password length should be between 8-16!";
+        return false;
+	}
+    if(upass != upass2) {
+        document.getElementById("error").innerHTML="Passwords doesn't match!";
+        return false;
+	}
+	xhttp.onreadystatechange=function() {
+		if( this.readyState == 4 && this.status == 200) {
+			if(this.responseText == "invalid_uname") {
+				document.getElementById("error").innerHTML="Username already taken!";
+			}
+            if(this.responseText == "signedup") {
+				document.getElementById("error").innerHTML="Registered successfully!Please Login!";
+			}
+		}
+	};
+	xhttp.open("POST","/NewUser",true);
+	xhttp.setRequestHeader("Content-Type", "application/json");
+	xhttp.send(credential);
+}
+</script>
+</body>
+</html>

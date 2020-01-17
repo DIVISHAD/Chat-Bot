@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>Login Page</title>
+	</head>
+	<body>
+		<br>
+		<form name = "login_form">
+			<table align = "center">
+				<tr>
+					<td align = "center"><h3>Please enter your login credentials</h3></td>
+				</tr>
+			</table>
+			<table align = "center">
+				<tr>
+					<td> Name:</td>
+					<td> <input type="text" name = "username" placeholder = "Your Username" required> </td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input type = "password" name = "password" placeholder = "Your Password" required></td>
+				</tr>		
+				<tr>
+					<td><a href = "/signup">SignUp</a></td>
+					<td align = "center"><input type = "button" value = "Login" onclick = validate()></td>
+				</tr>
+			</table>
+			<table align = "center">
+				<tr align = "center">
+					<td align = "center"><p id = "error"></p></td>
+				</tr>
+			</table>
+		</form>
+		<script>
+			function validate()
+			{
+				var xhttp = new XMLHttpRequest();
+				uname = document.forms["login_form"]["username"].value.trim();
+				upass = document.forms["login_form"]["password"].value.trim();
+				var credentials = {
+					"username":uname,
+					"password":upass
+				};
+				credential = JSON.stringify(credentials);
+				xhttp.onreadystatechange = function(){
+					if( this.readyState == 4 && this.status == 200){
+						if(uname.trim() == "")
+						{
+							alert("Username cannot be empty!");
+							return false;
+						}
+						if(this.responseText == "invalid")
+						{
+							document.getElementById("error").innerHTML = "Invalid username or password!";
+						}
+						else if(this.responseText == "valid")
+						{
+							document.cookie="username" + credentials["username"] + "; path=/";
+							window.location.href = "/chatbot";
+						}
+					}
+				};
+				xhttp.open("POST", "/validation", true);
+				xhttp.setRequestHeader("Content-Type", "application/json");
+				xhttp.send(credential);
+			}
+		</script>
+	</body>
+</html>
