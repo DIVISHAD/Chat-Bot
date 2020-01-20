@@ -78,10 +78,11 @@ function signup(){
 	}
 	xhttp.onreadystatechange=function() {
 		if( this.readyState == 4 && this.status == 200) {
-			if(this.responseText == "invalid_uname") {
+			data=JSON.parse(this.responseText);
+			if(data["response"] == "invalid_uname") {
 				document.getElementById("error").innerHTML="Username already taken!";
 			}
-            if(this.responseText == "signedup") {
+            if(data["response"] == "signedup") {
 				document.getElementById("error").innerHTML="Registered successfully!Please Login!";
 			}
 		}

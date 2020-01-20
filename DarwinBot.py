@@ -23,7 +23,7 @@ def darwinChat():
 def check_credentials():
     data = request.json
     result = validate_db(data["username"], data["password"])
-    if (result == "valid"):
+    if (result["response"] == "valid"):
         session["username"] = data["username"]
     return result
 
@@ -37,14 +37,17 @@ def add_credentials():
 def uname():
     if(session["username"] != ""):
         a = chat_history(session["username"])
+        if(a == ""):
+            return {"history":"none"}
         r = {'username':session["username"], 'bot':a['bot'], 'user':a['user']}
         return r
-    return ""
+    return {"username":""}
 
 @darwinBot.route("/bot_response", methods = ["GET","POST"] )
 def resp():
     data = request.json
-    return botResponse(data["user"], session["username"])
+    rply=botResponse(data["user"], session["username"])
+    return {"response":rply}
 
 
 

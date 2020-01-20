@@ -50,11 +50,12 @@
 							alert("Username cannot be empty!");
 							return false;
 						}
-						if(this.responseText == "invalid")
+						data=JSON.parse(this.responseText);
+						if(data["response"] == "invalid")
 						{
 							document.getElementById("error").innerHTML = "Invalid username or password!";
 						}
-						else if(this.responseText == "valid")
+						else if(data["response"] == "valid")
 						{
 							document.cookie="username" + credentials["username"] + "; path=/";
 							window.location.href = "/chatbot";

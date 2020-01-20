@@ -7,9 +7,9 @@ db = client.DarwinBot
 def add_user(data):
     res = db.users.find( { "username":data["username"] } ).count()
     if (res >= 1):
-        return "invalid_uname"
+        return {"response":"invalid_uname"}
     else :
         data["password"] = encrypted_text(data["password"], data["username"])
         res = db.users.insert_one(data)
         if(res != None):
-            return "signedup"
+            return {"response":"signedup"}

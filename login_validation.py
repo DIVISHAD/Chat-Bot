@@ -8,6 +8,6 @@ def validate_db(username,password):
     cipher=encrypted_text(password,username)
     res = db.users.find( {"username":username, "password":cipher} ).count()
     if(res >= 1):
-        return "valid"
+        return {"response":"valid"}
     else: 
-        return "invalid"    
+        return {"response":"invalid"}    
